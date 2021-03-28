@@ -1,2 +1,2 @@
 # Algorithm
-Learning code together
+Learn code together
