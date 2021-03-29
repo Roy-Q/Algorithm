@@ -251,7 +251,7 @@ public:
 
 - 记 i 为当前位置，当存在s[j] = s[i] ，记此时 j 为距离 s[i] 最近的字符下标
 - 若 i - j >=dp[i - 1] + 1时，dp[i] = dp[i - 1] + 1
-- 若 i - j < dp[i - 1] 时，dp[i] = 1;
+- 若 i - j < dp[i - 1] 时，dp[i] = i - j ;
 
 ```c++
 class Solution {
@@ -260,11 +260,23 @@ public:
      	int n = s.size();
         map<char,int> Hashmap;
         int dp[n];       //dp[i]为以s[n]为结尾的不含字符的最长子串的长度
+        				 //variable length array bound evaluates to non-positive value 0 
         dp[0] = 1;
+        Hashmap[s[0]] = 0;
         int result = dp[0];
         for(int i = 1;i < n; ++i ){
-            
+            if(Hashmap.find(s[i]) == Hashmap.end()){   //如果找不到
+                Hashmap[s[i]] = i;
+                dp[i] = dp[i - 1] + 1;
+            }
+            else{
+                int j = Hashmap[s[i]];        //获取s[i]在Hashmap中最近的索引
+                Hashmap[s[i]] = i;            //更新Hashmap
+                dp[i] = i - j >= dp[i - 1] + 1 ? dp[i - 1] + 1: i - j;
+            }
+            result = max(dp[i] , result);
         }
+        return result;
     }
 };
 ```
